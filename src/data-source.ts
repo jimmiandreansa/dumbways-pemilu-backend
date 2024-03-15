@@ -10,10 +10,10 @@ export const AppDataSource = new DataSource({
   port: 5432,
   username: "postgres",
   password: "Authentic11.",
-  database: "micro_app",
+  database: "micro_app_backend",
   synchronize: true,
   logging: false,
-  entities: [Users, Articles],
+  entities: ["src/entity/**/*.ts"],
   migrations: [],
   subscribers: [],
 });

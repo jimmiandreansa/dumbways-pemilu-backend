@@ -1,18 +1,15 @@
 import { Request, Response } from "express";
-import UserService from "../services/UserService";
-import { UserValidator } from "../utils/validator/User";
+import PartaiService from "../services/PartaiService";
 
-export default new (class UserController {
+export default new (class PartaiController {
   async create(req: Request, res: Response): Promise<Response> {
     try {
       const data = req.body;
-      const { error, value } = UserValidator.validate(data);
-      if (error)
-        return res.status(400).json({ message: error.details[0].message });
-      const user = await UserService.create(value);
-      return res
-        .status(201)
-        .json({ message: "Success create a user", data: user });
+      const partai = await PartaiService.create(data);
+      return res.status(201).json({
+        message: "Succesfull add partai",
+        data: partai,
+      });
     } catch (err) {
       return res.status(500).json({ message: err });
     }
@@ -20,10 +17,10 @@ export default new (class UserController {
 
   async find(req: Request, res: Response): Promise<Response> {
     try {
-      const users = await UserService.find();
+      const partai = await PartaiService.find();
       return res
         .status(200)
-        .json({ message: "Success find all users data", data: users });
+        .json({ message: "Successful find all data partai", data: partai });
     } catch (err) {
       return res.status(500).json({ message: err });
     }
@@ -32,10 +29,11 @@ export default new (class UserController {
   async findOne(req: Request, res: Response): Promise<Response> {
     try {
       const id = parseInt(req.params.id);
-      const user = await UserService.findOne(id);
-      return res
-        .status(200)
-        .json({ message: `Success find user with id = ${id}`, data: user });
+      const partai = await PartaiService.findOne(id);
+      return res.status(200).json({
+        message: `Partai found with id = ${id}`,
+        data: partai,
+      });
     } catch (err) {
       return res.status(500).json({ message: err });
     }
@@ -45,9 +43,9 @@ export default new (class UserController {
     try {
       const id = parseInt(req.params.id);
       const { body } = req;
-      await UserService.update(id, body);
+      await PartaiService.update(id, body);
       return res.status(200).json({
-        message: "Updated successfully",
+        message: `Successfull update partai with id = ${id}`,
         data: { id, ...body },
       });
     } catch (err) {
@@ -58,8 +56,10 @@ export default new (class UserController {
   async remove(req: Request, res: Response): Promise<Response> {
     try {
       const id = parseInt(req.params.id);
-      await UserService.remove(id);
-      return res.status(200).json({ message: "User has been remove" });
+      await PartaiService.remove(id);
+      return res
+        .status(200)
+        .json({ message: `Successful delete partai with id = ${id}` });
     } catch (err) {
       return res.status(500).json({ message: err });
     }

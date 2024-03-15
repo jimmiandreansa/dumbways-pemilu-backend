@@ -12,6 +12,7 @@ export default new (class UserService {
         gender: datas.gender,
         username: datas.username,
         password: datas.password,
+        // role: datas.role,
       });
 
       await this.UserRepository.createQueryBuilder()
@@ -47,6 +48,37 @@ export default new (class UserService {
       }
 
       return user;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async update(
+    id: number,
+    data: {
+      fullname: string;
+      address: string;
+      gender: any;
+      username: string;
+      password: string;
+      // role: any;
+    }
+  ): Promise<any> {
+    try {
+      const dataUpdate = await this.UserRepository.createQueryBuilder()
+        .update(Users)
+        .set({
+          fullname: data.fullname,
+          address: data.address,
+          gender: data.gender,
+          username: data.username,
+          password: data.password,
+          // role: data.role,
+        })
+        .where("id = :id", {id: id})
+        .execute()
+
+      return dataUpdate
     } catch (err) {
       throw err;
     }

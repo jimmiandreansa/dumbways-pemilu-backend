@@ -1,6 +1,22 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn, OneToOne } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  OneToOne,
+} from "typeorm";
 import { Articles } from "./Articles";
-import { Paslon } from "./Paslon";
+import { Vote } from "./Vote";
+
+export enum Gender {
+  Male = 'Laki-laki',
+  Female = 'Perempuan'
+}
+
+export enum Roles {
+  Admin = 'Admin',
+  User = 'User'
+}
 
 @Entity()
 export class Users {
@@ -8,16 +24,17 @@ export class Users {
   id: number;
 
   @Column()
-  paslonId: number;
-
-  @Column()
   fullname: string;
 
   @Column()
   address: string;
 
-  @Column()
-  gender: string;
+  @Column({
+    type: "enum",
+    enum: Gender,
+    default: Gender.Male,
+})
+gender: Gender
 
   @Column()
   username: string;
@@ -25,10 +42,18 @@ export class Users {
   @Column()
   password: string;
 
-  @OneToMany(() => Articles, (post) => post.users)
+  @Column({
+    type: "enum",
+    enum: Roles,
+    default: Roles.User,
+    nullable: true
+})
+role: Roles
+
+  // Relations
+  @OneToMany(() => Articles, (post) => post.user)
   articles: Articles[];
 
-  @OneToOne(() => Paslon)
-  @JoinColumn({ name: "paslonId", referencedColumnName: "id" })
-  paslon: Paslon;
+  @OneToOne(() => Vote, (vote) => vote.user)
+  vote: Vote;
 }

@@ -1,5 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from "typeorm";
-import { Users } from "./Users";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToOne,
+  OneToMany,
+} from "typeorm";
+import { Vote } from "./Vote";
+import { Partai } from "./Partai";
 
 @Entity()
 export class Paslon {
@@ -7,17 +14,24 @@ export class Paslon {
   id: number;
 
   @Column()
-  name: string;
+  namePaslon: string;
 
   @Column()
-  number: number;
+  numberPaslon: number;
 
-  @Column()
-  image: string;
+  @Column({nullable: true})
+  imagePaslon: string;
 
   @Column({ array: true })
   visiMisi: string;
 
-  @OneToOne(() => Users, (users) => users.paslon)
-  users: Users;
+  @Column({ array: true, nullable: true })
+  koalisi: string;
+
+  // Relations
+  @OneToOne(() => Vote, (vote) => vote.paslon)
+  vote: Vote;
+
+  @OneToMany(() => Partai, (partai) => partai.paslon)
+  partai: Partai[];
 }

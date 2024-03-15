@@ -2,13 +2,14 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
+  OneToOne,
   JoinColumn,
 } from "typeorm";
 import { Users } from "./Users";
+import { Paslon } from "./Paslon";
 
 @Entity()
-export class Articles {
+export class Vote {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -16,22 +17,17 @@ export class Articles {
   userId: number;
 
   @Column()
-  title: string;
-
-  @Column()
-  content: string;
-
-  @Column()
-  imageUrl: string;
-
-  @Column({ type: "bool", default: false })
-  isHeadline: boolean;
+  paslonId: number;
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
-  createdDate: Date;
+  voteDate: Date;
 
   // Relations
-  @ManyToOne(() => Users, { eager: true })
+  @OneToOne(() => Users, (user) => user.vote)
   @JoinColumn({ name: "userId", referencedColumnName: "id" })
   user: Users;
+
+  @OneToOne(() => Paslon, (paslon) => paslon.vote)
+  @JoinColumn({ name: "paslonId", referencedColumnName: "id" })
+  paslon: Paslon;
 }
